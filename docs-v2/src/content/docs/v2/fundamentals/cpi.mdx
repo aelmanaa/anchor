@@ -181,8 +181,8 @@ repeated. They only go stale if the callee can change the account's owner/data/s
 - the CPI resizes it, changing a slab's capacity
 
 A callee that cannot write to your program-owned account cannot do any of
-these, so token transfers and similar CPIs need no extra step. If the CPI
-goes back into your own program, or can close or resize the account because it owns it, call
+these, so token transfers and similar CPIs need no extra step. If the CPI is reentrant
+(calls back into your own program), or can close or resize the account because it owns it, call
 `revalidate_after_cpi(){:rs}` before reading it again:
 
 ```rust showLineNumbers=false
