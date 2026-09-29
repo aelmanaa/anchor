@@ -818,6 +818,8 @@ fn parse_sysvar(path: &syn::Path) -> ParseResult<SysvarTy> {
     };
     const UNSUPPORTED_SLOT_HASHES_SYSVAR: &str =
         "SlotHashes cannot be used as a Sysvar account because it cannot be deserialized on chain";
+    const UNSUPPORTED_INSTRUCTIONS_SYSVAR: &str =
+        "Instructions cannot be used as a Sysvar account because it cannot be deserialized on chain";
 
     let ty = match account_ident.to_string().as_str() {
         "Clock" => SysvarTy::Clock,
@@ -833,7 +835,12 @@ fn parse_sysvar(path: &syn::Path) -> ParseResult<SysvarTy> {
         }
         "SlotHistory" => SysvarTy::SlotHistory,
         "StakeHistory" => SysvarTy::StakeHistory,
-        "Instructions" => SysvarTy::Instructions,
+        "Instructions" => {
+            return Err(ParseError::new(
+                account_ident.span(),
+                UNSUPPORTED_INSTRUCTIONS_SYSVAR,
+            ))
+        }
         "Rewards" => SysvarTy::Rewards,
         _ => {
             return Err(ParseError::new(
@@ -867,6 +874,20 @@ mod tests {
             r#"
             pub struct Test<'info> {
                 pub slot_hashes: Sysvar<'info, SlotHashes>,
+            }
+            "#,
+        )
+        .unwrap_err();
+
+        assert!(err.to_string().contains("cannot be deserialized on chain"));
+    }
+
+    #[test]
+    fn rejects_instructions_as_sysvar_account() {
+        let err = syn::parse_str::<AccountsStruct>(
+            r#"
+            pub struct Test<'info> {
+                pub instructions: Sysvar<'info, Instructions>,
             }
             "#,
         )

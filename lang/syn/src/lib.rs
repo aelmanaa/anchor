@@ -390,7 +390,6 @@ impl Field {
                     SysvarTy::RecentBlockhashes => quote! {RecentBlockhashes},
                     SysvarTy::SlotHistory => quote! {SlotHistory},
                     SysvarTy::StakeHistory => quote! {StakeHistory},
-                    SysvarTy::Instructions => quote! {Instructions},
                     SysvarTy::Rewards => quote! {Rewards},
                 };
                 quote! {
@@ -622,7 +621,6 @@ impl Field {
                 SysvarTy::RecentBlockhashes => quote! {RecentBlockhashes},
                 SysvarTy::SlotHistory => quote! {SlotHistory},
                 SysvarTy::StakeHistory => quote! {StakeHistory},
-                SysvarTy::Instructions => quote! {Instructions},
                 SysvarTy::Rewards => quote! {Rewards},
             },
             Ty::Program(ty) => {
@@ -684,7 +682,6 @@ pub enum SysvarTy {
     RecentBlockhashes,
     SlotHistory,
     StakeHistory,
-    Instructions,
     Rewards,
 }
 

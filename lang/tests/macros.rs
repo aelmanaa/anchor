@@ -26,8 +26,10 @@ fn test_pubkey() {
 }
 
 #[test]
-fn test_slot_hashes_stays_exported_from_prelude() {
+fn test_unsupported_sysvars_stay_exported_from_prelude() {
     fn accepts_slot_hashes(_: Option<anchor_lang::prelude::SlotHashes>) {}
+    fn accepts_instructions(_: Option<anchor_lang::prelude::Instructions>) {}
 
     accepts_slot_hashes(None);
+    accepts_instructions(None);
 }
